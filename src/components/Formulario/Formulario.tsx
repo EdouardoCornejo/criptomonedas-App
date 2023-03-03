@@ -4,6 +4,7 @@ import {pickerValues} from '../../data/formularioPicker';
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios';
 import {Datum} from '../../types/PickerTypes';
+import {apiType} from '../../types/ApiTypes';
 
 interface FormularioProps {
   moneda: string;
@@ -11,6 +12,7 @@ interface FormularioProps {
   setMoneda: Dispatch<SetStateAction<string>>;
   setCriptoMoneda: Dispatch<SetStateAction<string>>;
   setConsultarApi: Dispatch<SetStateAction<boolean>>;
+  resultado: apiType;
 }
 
 const Formulario: FC<FormularioProps> = ({
@@ -19,6 +21,7 @@ const Formulario: FC<FormularioProps> = ({
   setMoneda,
   setCriptoMoneda,
   setConsultarApi,
+  resultado,
 }) => {
   const [criptoMonedas, setCriptoMonedas] = useState<Datum[]>([]);
 
@@ -38,7 +41,11 @@ const Formulario: FC<FormularioProps> = ({
   }, []);
 
   const cotizarPrecio = () => {
-    if (moneda.trim() === '' || criptoMoneda.trim() === '') {
+    if (
+      moneda.trim() === '' ||
+      criptoMoneda.trim() === '' ||
+      resultado === undefined
+    ) {
       mostrarAlerta();
     }
     setConsultarApi(true);

@@ -6,15 +6,58 @@ import {apiType} from './src/types/ApiTypes';
 
 function App(): JSX.Element {
   const [moneda, setMoneda] = useState('');
-  console.log('🚀 ~ file: App.tsx:9 ~ App ~ moneda:', moneda);
   const [criptoMoneda, setCriptoMoneda] = useState('');
-  console.log('🚀 ~ file: App.tsx:10 ~ App ~ criptoMoneda:', criptoMoneda);
   const [consultarApi, setConsultarApi] = useState(false);
-  const [api, setApi] = useState<apiType>();
+  const [api, setApi] = useState<apiType>({
+    CHANGE24HOUR: '',
+    CHANGEDAY: '',
+    CHANGEHOUR: '',
+    CHANGEPCT24HOUR: '',
+    CHANGEPCTDAY: '',
+    CHANGEPCTHOUR: '',
+    CIRCULATINGSUPPLY: '',
+    CIRCULATINGSUPPLYMKTCAP: '',
+    CONVERSIONSYMBOL: '',
+    CONVERSIONTYPE: '',
+    FROMSYMBOL: '',
+    HIGH24HOUR: '',
+    HIGHDAY: '',
+    HIGHHOUR: '',
+    IMAGEURL: '',
+    LASTMARKET: '',
+    LASTTRADEID: '',
+    LASTUPDATE: '',
+    LASTVOLUME: '',
+    LASTVOLUMETO: '',
+    LOW24HOUR: '',
+    LOWDAY: '',
+    LOWHOUR: '',
+    MARKET: '',
+    MKTCAP: '',
+    MKTCAPPENALTY: '',
+    OPEN24HOUR: '',
+    OPENDAY: '',
+    OPENHOUR: '',
+    PRICE: '',
+    SUPPLY: '',
+    TOPTIERVOLUME24HOUR: '',
+    TOPTIERVOLUME24HOURTO: '',
+    TOSYMBOL: '',
+    TOTALTOPTIERVOLUME24H: '',
+    TOTALTOPTIERVOLUME24HTO: '',
+    TOTALVOLUME24H: '',
+    TOTALVOLUME24HTO: '',
+    VOLUME24HOUR: '',
+    VOLUME24HOURTO: '',
+    VOLUMEDAY: '',
+    VOLUMEDAYTO: '',
+    VOLUMEHOUR: '',
+    VOLUMEHOURTO: '',
+  });
 
   useEffect(() => {
     const cotizarCriptomoneda = async () => {
-      if (consultarApi) {
+      if (consultarApi === true) {
         try {
           const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptoMoneda},ETH&tsyms=${moneda}`;
           const resultado = await axios.get(url);
@@ -23,9 +66,8 @@ function App(): JSX.Element {
         } catch (error: any) {
           console.error(error.message);
         }
-
-        setConsultarApi(false);
       }
+      setConsultarApi(false);
     };
     cotizarCriptomoneda();
   }, [moneda, criptoMoneda, consultarApi]);
@@ -42,6 +84,7 @@ function App(): JSX.Element {
 
         <View style={styles.contenido}>
           <Formulario
+            resultado={api}
             moneda={moneda}
             criptoMoneda={criptoMoneda}
             setMoneda={setMoneda}
