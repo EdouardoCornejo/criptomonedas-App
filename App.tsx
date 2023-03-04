@@ -1,6 +1,12 @@
 import axios from 'axios';
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, View, ScrollView} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  View,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import {Header, Formulario, Cotizacion} from './src/components/';
 import {apiType} from './src/types/ApiTypes';
 
@@ -54,6 +60,7 @@ function App(): JSX.Element {
     VOLUMEHOUR: '',
     VOLUMEHOURTO: '',
   });
+  const [cargando, setCargando] = useState(false);
 
   useEffect(() => {
     const cotizarCriptomoneda = async () => {
@@ -63,6 +70,12 @@ function App(): JSX.Element {
           const resultado = await axios.get(url);
           console.log(resultado?.data.DISPLAY[criptoMoneda][moneda]);
           setApi(resultado?.data.DISPLAY[criptoMoneda][moneda]);
+          setCargando(true);
+
+          setTimeout(() => {
+            setCargando(false);
+            setConsultarApi(false);
+          }, 3000);
         } catch (error: any) {
           console.error(error.message);
         }
@@ -71,6 +84,13 @@ function App(): JSX.Element {
     };
     cotizarCriptomoneda();
   }, [moneda, criptoMoneda, consultarApi]);
+
+  //mostrar espines o resultado
+  const componente = cargando ? (
+    <ActivityIndicator size={'large'} color="#5E49E2" />
+  ) : (
+    <Cotizacion resultado={api} />
+  );
 
   return (
     <ScrollView>
@@ -91,8 +111,8 @@ function App(): JSX.Element {
             setCriptoMoneda={setCriptoMoneda}
             setConsultarApi={setConsultarApi}
           />
-          <Cotizacion resultado={api} />
         </View>
+        <View style={{marginVertical: 40}}>{componente}</View>
       </View>
     </ScrollView>
   );
